@@ -33,8 +33,5 @@
 Desenvolvido por [João Miguel (Miguel2k20)](https://github.com/Miguel2k20).  
 Contribuições, feedbacks e sugestões são sempre bem-vindos!
 
----
 
-## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
