@@ -10,7 +10,6 @@
 - 📄 **Listar capítulos** disponíveis de um mangá
 - 📥 **Fazer download** de capítulos ou volumes completos em formato de imagem (JPG)
 - 🧾 **Converter capítulos/volumes** para **PDF**
-- 📱 *(em breve)* Suporte à exportação para formato **.mobi** (e-readers)
 
 ---
 
