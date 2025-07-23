@@ -53,7 +53,11 @@ export class UserController {
                 return res.status(400).send({"error": 'Senha ou E-mail Incorretos'})
             }
 
-            const token = jwt.sign({id: user.id}, process.env.TOKEN_PASS ?? '', {expiresIn: '8h'})
+            const jwtPayload = {
+                id: user.id
+            }
+
+            const token = jwt.sign(jwtPayload, process.env.TOKEN_PASS ?? '', {expiresIn: '8h'})
 
             const {password:_, ...userData } = user
 
@@ -61,6 +65,17 @@ export class UserController {
                 'token': token,
                 'user': userData
             })
+        } catch (error) {
+            return res.status(500).json({
+                message: "Erro interno do servidor",
+                status: 500,
+            });
+        }
+    }
+
+    async teste(req:Request, res:Response) {
+        try {
+            res.send("prikito")
         } catch (error) {
             return res.status(500).json({
                 message: "Erro interno do servidor",
