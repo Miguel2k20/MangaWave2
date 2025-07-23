@@ -6,6 +6,5 @@ dataSource.initialize().then(()=>{
     const app = Express()
     app.use(Express.json())
     app.use(router)
-    app.use(errorMiddleware)
     app.listen(process.env.APP_PORT)
 })

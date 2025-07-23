@@ -1,11 +1,9 @@
 import { Router } from "express"
-import { ApiCustomErros } from "./helpers/ApiCustomErros"
+import { Request, Response } from "express"
+import { UserController } from "./controllers/UserController"
 
 const router = Router()
 
-router.get('/', (req, res) => {
-    throw new ApiCustomErros("Teste de erro", 404)
-    // res.send('Fuck.')
-})
+router.post('/user', (req:Request, res:Response) => { new UserController().create(req, res) })
 
 export default router
