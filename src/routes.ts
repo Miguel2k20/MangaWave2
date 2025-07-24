@@ -1,6 +1,7 @@
 import { NextFunction, Router, Response, Request } from "express"
 import { UserController } from "./controllers/UserController"
 import { authMiddleware } from "./middlewares/authMiddleware"
+import { MangadexApi } from "./controllers/MangadexApi"
 
 const router = Router()
 
@@ -8,6 +9,6 @@ router.post('/user', (req:Request, res:Response) => { new UserController().creat
 router.post('/login', (req:Request, res:Response) => { new UserController().login(req, res) })
 
 router.use(authMiddleware as (req: Request, res: Response, next: NextFunction) => void)
-router.post('/teste', (req:Request, res:Response) => { new UserController().teste(req, res) })
+router.get('/manga', (req:Request, res:Response) => { new MangadexApi().fetchMangasByName(req, res) })
 
 export default router

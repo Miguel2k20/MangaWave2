@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
 export class UserController {
-
     async create(req:Request, res:Response) {
         try {
             const { name, email, password } = req.body
@@ -65,17 +64,6 @@ export class UserController {
                 'token': token,
                 'user': userData
             })
-        } catch (error) {
-            return res.status(500).json({
-                message: "Erro interno do servidor",
-                status: 500,
-            });
-        }
-    }
-
-    async teste(req:Request, res:Response) {
-        try {
-            res.send("prikito")
         } catch (error) {
             return res.status(500).json({
                 message: "Erro interno do servidor",
