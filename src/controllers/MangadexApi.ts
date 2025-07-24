@@ -64,6 +64,6 @@ export class MangadexApi {
         return filteredData
     }
     private buildUrlImage(mangaId:string, coverArtJpg:string, size: "512"|'256'):string {
-        return `${process.env.MANGADEX_IMAGE_URL}/covers/${mangaId}/${coverArtJpg}.${size}`
+        return `${process.env.MANGADEX_IMAGE_URL}/covers/${mangaId}/${coverArtJpg}`
     }
 }
