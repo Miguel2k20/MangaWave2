@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import axios from "axios";
 
-export class MangadexApi {
-    public async fetchMangasByName(req:Request, res:Response):Promise<Response> {
+export class MangaController {
+    public async handle(req:Request, res:Response) {
         try {
             const { title, language } : {title:string, language:number } = req.body
             
@@ -24,25 +24,42 @@ export class MangadexApi {
             })
 
             if(!resp){
-                return res.status(400).send('Erro na api externa')
+                throw res.status(400).send('Erro na api externa')
             }
 
             const originalResponse = resp.data;
             const filteredData = this.filterRelevantData(originalResponse);
 
-            return res.json({
+            res.json({
                 ...originalResponse,
                 data: filteredData
             });
             
         } catch (error) {
-            console.log(error)
-            return res.status(500).json({
+            res.status(500).json({
                 message: "Erro interno do servidor",
                 status: 500,
             });
         }
     }
+
+    // public async fetchChapters(req:Request, res:Response){
+    //     const { mangaId, language }  = req.params;
+
+    //         const resp = await axios({
+    //             method: 'GET',
+    //             url: `${process.env.MANGADEX_URL}/manga/${mangaId}/feed`,
+    //             params: {
+    //                 "translatedLanguage[]": [language],
+    //                 "order[volume]": "asc",
+    //                 "order[chapter]": "asc",
+    //                 "limit": 50,
+    //             }
+    //         })
+
+    //     res.send(resp.data)
+    // }
+
     private filterRelevantData(data:ResponseApi) {
 
         const filteredData: { [key: string]: any } = {}
