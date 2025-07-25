@@ -18,4 +18,8 @@ export class ChapterController {
 
         res.send(resp.data);
     }
+
+    private filterRelevantData(mangalist:ResponseChapterApi){
+        return mangalist
+    }
 }

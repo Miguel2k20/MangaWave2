@@ -43,23 +43,6 @@ export class MangaController {
         }
     }
 
-    // public async fetchChapters(req:Request, res:Response){
-    //     const { mangaId, language }  = req.params;
-
-    //         const resp = await axios({
-    //             method: 'GET',
-    //             url: `${process.env.MANGADEX_URL}/manga/${mangaId}/feed`,
-    //             params: {
-    //                 "translatedLanguage[]": [language],
-    //                 "order[volume]": "asc",
-    //                 "order[chapter]": "asc",
-    //                 "limit": 50,
-    //             }
-    //         })
-
-    //     res.send(resp.data)
-    // }
-
     private filterRelevantData(data:ResponseApi) {
 
         const filteredData: { [key: string]: any } = {}
@@ -80,6 +63,7 @@ export class MangaController {
 
         return filteredData
     }
+    
     private buildUrlImage(mangaId:string, coverArtJpg:string, size: "512"|'256'):string {
         return `${process.env.MANGADEX_IMAGE_URL}/covers/${mangaId}/${coverArtJpg}`
     }

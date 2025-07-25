@@ -10,7 +10,7 @@ const router = Router()
 router.post('/user', new UserCreateController().handle)
 router.post('/login', new UserLoginController().handle)
 
-router.use(authMiddleware)
+// router.use(authMiddleware)
 router.get('/manga', new MangaController().handle)
 router.get('/chapter/:mangaId/:language', new ChapterController().handle)
 
