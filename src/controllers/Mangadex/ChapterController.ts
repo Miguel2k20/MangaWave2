@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import axios from "axios";
 
 export class ChapterController {
-    
+
     public async handle(req: Request, res: Response) {
         const { mangaId, language }  = req.params;
 
@@ -14,7 +14,8 @@ export class ChapterController {
                 "order[volume]": "asc",
                 "order[chapter]": "asc",
                 "limit": 50,
-            }
+                // "includeUnavailable": 1
+            } 
         });
 
         const originalResponse = resp.data
