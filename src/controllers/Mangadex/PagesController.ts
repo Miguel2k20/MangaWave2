@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import axios from "axios";
-import { send } from "process";
 
 export class PagesController {
 
