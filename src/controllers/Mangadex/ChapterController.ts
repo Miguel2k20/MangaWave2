@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import axios from "axios";
 
 export class ChapterController {
+    
     public async handle(req: Request, res: Response) {
         const { mangaId, language }  = req.params;
 
@@ -16,10 +17,33 @@ export class ChapterController {
             }
         });
 
-        res.send(resp.data);
+        const originalResponse = resp.data
+        const filtredData = this.filterRelevantData(originalResponse)
+
+        res.json({
+            ...originalResponse,
+            data: filtredData
+        })
     }
 
     private filterRelevantData(mangalist:ResponseChapterApi){
-        return mangalist
+        const volumeList: Record<string, ChapterData[]> = {}
+
+        mangalist.data.forEach((item) => {
+            let volume = item.attributes.volume
+
+            if(!volume) {
+                volume = "Volume não definido"
+            }
+
+            if (!volumeList[volume]) {
+                volumeList[volume] = []
+            }
+
+            volumeList[volume].push(item)
+
+        })
+
+        return volumeList
     }
 }
