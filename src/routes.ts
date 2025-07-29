@@ -7,11 +7,17 @@ import { UserLoginController } from "./controllers/User/UserLoginController"
 
 const router = Router()
 
+// Rotas sem autenticação
 router.post('/user', new UserCreateController().handle)
 router.post('/login', new UserLoginController().handle)
 
 // router.use(authMiddleware)
-router.get('/manga', new MangaController().handle)
-router.get('/chapter/:mangaId/:language', new ChapterController().handle)
+
+// Criando instâncias dos controllers
+const mangaController = new MangaController();
+const chapterController = new ChapterController();
+
+router.get('/manga', mangaController.handle.bind(mangaController))
+router.get('/chapter/:mangaId/:language', chapterController.handle.bind(chapterController))
 
 export default router
