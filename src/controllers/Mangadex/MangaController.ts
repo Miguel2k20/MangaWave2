@@ -1,27 +1,14 @@
 import { Request, Response } from "express"
-import axios from "axios";
+import { MangaDexService } from "../../services/MangaDexService";
 
 export class MangaController {
     public async handle(req:Request, res:Response) {
         try {
             const { title, language } : {title:string, language:number } = req.body
-            
-            let languageList:Record<number, string> = {
-                1:'pt-br',
-                2:'en'
-            }
 
-            const resp = await axios({
-                method: 'GET',
-                url: `${process.env.MANGADEX_URL}/manga`,
-                params: {
-                    title: title ?? '',
-                    "limit": 25,
-                    // "offset": offset,
-                    "includes[]" : "cover_art",
-                    "availableTranslatedLanguage[]" : [languageList[language] ?? 'pt-br']
-                }
-            })
+            const mangaDexService = new MangaDexService
+
+            const resp = await mangaDexService.fetchMangaList(title,language)
 
             if(!resp){
                 throw res.status(400).send('Erro na api externa')

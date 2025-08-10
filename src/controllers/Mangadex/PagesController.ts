@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
-import axios from "axios";
+import { MangaDexService } from "../../services/MangaDexService";
 
 export class PagesController {
 
     public async handle(req: Request, res: Response) {
         const { mangaId }  = req.params;
-
-        const resp = await axios({
-            method: 'GET',
-            url: `${process.env.MANGADEX_URL}/at-home/server/${mangaId}`,
-        });
-
+        
+        const mangaDexService = new MangaDexService
+        const resp = await mangaDexService.fetchPages(mangaId)
+        
+        if(!resp){
+            throw res.status(400).send('Erro na api externa')
+        }
+        
         const origianlResponse = resp.data
         const finalResponse = this.buildUrlImages(origianlResponse.chapter.data, origianlResponse.chapter.hash)
 
