@@ -1,48 +1,61 @@
-import axios from "axios";
+import { promises } from "dns";
+import { MangaDexClient } from "../clients/MangaDexClient";
 
 export class MangaDexService {
 
-    public async fetchChapter(mangaId:string, language:string) {
+    private client = new MangaDexClient()
 
-        return axios({
-            method: 'GET',
-            url: `${process.env.MANGADEX_URL}/manga/${mangaId}/feed`,
-            params: {
-                "translatedLanguage[]": [language],
-                "order[volume]": "asc",
-                "order[chapter]": "asc",
-                "limit": 50,
-                // "includeUnavailable": 1
-            } 
-        });
-        
-    }
+    public async fetchChapterFiltred(mangaId:string, language:string): Promise<Record<string, any>> {
+        const { data } = await this.client.fetchChapter(mangaId, language)
 
-    public async fetchMangaList(title:string, language:number) {
-        
-        let languageList:Record<number, string> = {
-            1:'pt-br',
-            2:'en'
+        const volumeList: Record<string, any[]> = {}
+
+        data.data.forEach((item: any) => {
+            let volume = item.attributes.volume || "Volume não definido"
+            if (!volumeList[volume]) {
+                volumeList[volume] = []
+            }
+            volumeList[volume].push(item)
+        })
+
+        return {
+            ...data,
+            data: volumeList
         }
-        
-        return axios({
-            method: 'GET',
-            url: `${process.env.MANGADEX_URL}/manga`,
-            params: {
-                title: title ?? '',
-                "limit": 25,
-                // "offset": offset,
-                "includes[]" : "cover_art",
-                "availableTranslatedLanguage[]" : [languageList[language] ?? 'pt-br']
+    }
+    
+    public async getMangaListFiltered(title: string, language: number): Promise<Record<string, any>> {
+        const { data } = await this.client.fetchMangaList(title, language)
+
+        const filteredData: Record<string, any> = {}
+        data.data.forEach((item: any) => {
+            const mangaId = item.id
+            const coverArt = item.relationships.find((rel: any) => rel.type === "cover_art")?.attributes?.fileName
+
+            filteredData[mangaId] = {
+                type: item.type,
+                title: item.attributes.title.en ?? item.attributes.title.ja,
+                status: item.attributes.status,
+                lenguangesEnsabled: item.attributes.availableTranslatedLanguages,
+                coverArt: coverArt ? `${process.env.MANGADEX_IMAGE_URL}/covers/${mangaId}/${coverArt}` : ""
             }
         })
+
+        return {
+            ...data,
+            data: filteredData
+        }
     }
 
-    public async fetchPages(mangaId:string) {
-        return axios({
-            method: 'GET',
-            url: `${process.env.MANGADEX_URL}/at-home/server/${mangaId}`,
+    public async fetchPagesFiltred(mangaId:string):Promise<string[]> {
+        const { data } = await this.client.fetchPages(mangaId)
+        const urlImages:string[] = []
+        const hash = data.chapter.hash
+
+        data.chapter.data.forEach((item:string) => {
+            urlImages.push(`${process.env.MANGADEX_IMAGE_URL}/data/${hash}/${item}`)
         });
-    }
 
+        return urlImages
+    }
 }
